@@ -1,0 +1,825 @@
+/* ── FamilyQuest — v3 theme: liquid glass + warm light + blob creatures ───────
+   Reference: DESIGN-NOTES-v2.md. Warm cream base, frosted glass surfaces,
+   bold-but-warm accents, rounded joyful type. Two registers: bright game
+   colors, and quieter spoon/care colors. Tablet-first, big tap targets.
+
+   NOTE: the original RPG class vocabulary (.card/.btn/.nav/.who-card/…) is
+   preserved and re-skinned to v3 so every screen adopts the new look. New
+   components use the .glass-* / .btn-primary utilities at the bottom. */
+:root {
+  /* ── Backgrounds ── */
+  --bg-base: #0d0b1a;
+  --bg-surface: rgba(255, 255, 255, 0.08);
+  --bg-muted: rgba(255, 255, 255, 0.07);
+
+  /* ── Color system ── */
+  --coral: #ff6b6b;
+  --coral-light: rgba(255, 107, 107, 0.18);
+  --amber: #ffab2e;
+  --amber-light: rgba(255, 171, 46, 0.18);
+  --sky: #5bc4f5;
+  --sky-light: rgba(91, 196, 245, 0.18);
+  --mint: #3ecfab;
+  --mint-dark: #2db896;
+  --mint-light: rgba(62, 207, 171, 0.18);
+  --care: #f472b6;
+  --care-light: rgba(244, 114, 182, 0.18);
+
+  /* ── Neutrals ── */
+  --text-primary: #ffffff;
+  --text-body: rgba(255, 255, 255, 0.88);
+  --text-muted: rgba(255, 255, 255, 0.48);
+  --text-light: rgba(255, 255, 255, 0.24);
+
+  /* ── Dark glass ── */
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --glass-blur: blur(40px);
+
+  /* ── Legacy aliases (old markup keeps working, repointed to v3) ── */
+  --color-primary: var(--coral);
+  --color-secondary: var(--sky);
+  --color-accent: var(--coral);
+  --color-gold: var(--amber);
+  --color-spoon: var(--sky);
+  --color-care: var(--care);
+  --color-bg: var(--bg-base);
+  --color-surface: var(--bg-surface);
+  --color-surface-alt: var(--bg-muted);
+  --color-text: var(--text-primary);
+  --color-text-muted: var(--text-muted);
+  --color-success: var(--mint);
+  --color-warning: var(--amber);
+  --bg: var(--bg-base);
+  --card: var(--bg-surface);
+  --ink: var(--text-primary);
+  --ink-soft: var(--text-muted);
+  --line: rgba(0, 0, 0, 0.08);
+  --brand: var(--coral);
+  --brand-2: var(--sky);
+  --accent: var(--amber);
+  --green: var(--mint);
+  --blue: var(--sky);
+  --gold: var(--amber);
+  --danger: var(--coral);
+
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.07);
+  --glow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --radius: 20px;
+  --radius-sm: 14px;
+
+  /* ── Motion curves (DESIGN-NOTES "Animation Principles") ── */
+  --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --smooth: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Quicksand", ui-rounded, system-ui, sans-serif;
+  color: var(--text-body);
+  background-color: #0d0b1a;
+  background-image:
+    radial-gradient(ellipse 900px 750px at 4%   0%,  rgba(110, 50, 255, 0.80) 0%, transparent 54%),
+    radial-gradient(ellipse 780px 680px at 96%  6%,  rgba(255, 40, 130, 0.70) 0%, transparent 52%),
+    radial-gradient(ellipse 700px 620px at 90%  95%, rgba(50, 110, 255, 0.55) 0%, transparent 54%),
+    radial-gradient(ellipse 620px 520px at 5%   96%, rgba(30, 200, 120, 0.28) 0%, transparent 50%),
+    radial-gradient(ellipse 1100px 600px at 50% 50%, rgba(180, 40, 255, 0.14) 0%, transparent 62%);
+  background-attachment: fixed;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: contain;
+}
+
+/* iOS: inputs must be >=16px to avoid zoom-on-focus */
+input,
+select,
+textarea,
+button {
+  font-family: inherit;
+  font-size: 16px;
+}
+
+h1,
+h2,
+h3 {
+  margin: 0;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: "Quicksand", sans-serif;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+a {
+  color: var(--coral);
+}
+
+/* Numbers / XP / scores */
+.num {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 600;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+/* ── Layout shell ─────────────────────────────────────────────────────────── */
+.app-shell {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: calc(var(--safe-top) + 16px) 18px calc(var(--safe-bottom) + 104px);
+  min-height: 100vh;
+}
+
+.screen-title {
+  font-family: "Quicksand", sans-serif;
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 2px;
+  color: var(--text-primary);
+}
+.screen-sub {
+  color: var(--text-muted);
+  margin: 0 0 20px;
+  font-weight: 500;
+}
+
+/* ── Cards (liquid glass) ─────────────────────────────────────────────────── */
+.card {
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(48px) saturate(1.8);
+  -webkit-backdrop-filter: blur(48px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 22px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  padding: 20px 22px;
+  margin-bottom: 16px;
+}
+.card-flush {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ── Buttons (glass pills) ────────────────────────────────────────────────── */
+.btn {
+  min-height: 56px; /* DESIGN-NOTES: min 56px tap target */
+  padding: 0 28px;
+  border-radius: 100px;
+  background: linear-gradient(135deg, var(--coral) 0%, #ff8e53 100%);
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 4px 16px rgba(255, 107, 107, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  transition: transform 0.12s var(--spring), filter 0.15s ease;
+}
+.btn:active {
+  transform: scale(0.96);
+}
+.btn-block {
+  width: 100%;
+}
+.btn-green {
+  background: linear-gradient(135deg, var(--mint) 0%, #2fb898 100%);
+  box-shadow: 0 4px 16px rgba(62, 207, 171, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+.btn-pink {
+  /* care / "cover the shift" — warm, never alarming */
+  background: linear-gradient(135deg, #fba8d3 0%, var(--care) 100%);
+  box-shadow: 0 4px 16px rgba(244, 114, 182, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+.btn-accent {
+  /* reward redeem — amber */
+  background: linear-gradient(135deg, #ffc05c 0%, var(--amber) 100%);
+  box-shadow: 0 4px 16px rgba(255, 171, 46, 0.32),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  color: #5a3a00;
+}
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.10);
+  backdrop-filter: blur(12px);
+  border: 1.5px solid rgba(255, 255, 255, 0.16);
+  box-shadow: none;
+  color: var(--text-body);
+}
+.btn-danger {
+  background: linear-gradient(135deg, #ff8a8a 0%, var(--coral) 100%);
+  color: #fff;
+}
+.btn-lg {
+  min-height: 64px;
+  font-size: 19px;
+}
+.btn:disabled {
+  filter: grayscale(0.4) opacity(0.45);
+  cursor: not-allowed;
+}
+
+/* big tappable task row */
+.task-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.10);
+  margin-bottom: 10px;
+}
+.task-emoji {
+  font-size: 28px;
+  width: 48px;
+  height: 48px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-muted);
+  border-radius: 14px;
+  flex: 0 0 auto;
+}
+.task-main {
+  flex: 1;
+  min-width: 0;
+}
+.task-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-primary);
+}
+.task-meta {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: 500;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 107, 107, 0.18);
+  color: var(--coral);
+}
+.pill-buddy {
+  background: rgba(91, 196, 245, 0.18);
+  color: var(--sky);
+}
+.pill-approve {
+  background: rgba(255, 171, 46, 0.18);
+  color: var(--amber);
+}
+
+/* ── Quest card (v3 hero component) ───────────────────────────────────────── */
+.quest-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1.5px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+  margin-bottom: 12px;
+  transition: transform 0.18s var(--ease-out), box-shadow 0.18s var(--ease-out);
+}
+.quest-card:active {
+  transform: scale(0.99);
+}
+.quest-ico {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+.quest-main {
+  flex: 1;
+  min-width: 0;
+}
+.quest-title {
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--text-primary);
+  line-height: 1.25;
+}
+.quest-chips {
+  display: flex;
+  gap: 6px;
+  margin-top: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.pill-care {
+  background: rgba(244, 114, 182, 0.18);
+  color: var(--care);
+}
+
+/* Pending: gentle shimmer sweep */
+.quest-card.is-pending {
+  background: linear-gradient(
+    100deg,
+    rgba(255, 171, 46, 0.10) 30%,
+    rgba(255, 171, 46, 0.18) 50%,
+    rgba(255, 171, 46, 0.10) 70%
+  );
+  background-size: 220% 100%;
+  animation: quest-shimmer 2.2s ease-in-out infinite;
+  border-color: rgba(255, 171, 46, 0.35);
+}
+@keyframes quest-shimmer {
+  0% { background-position: 140% 0; }
+  100% { background-position: -40% 0; }
+}
+.quest-wait {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #c77f00;
+  font-weight: 700;
+  font-size: 13px;
+}
+.quest-wait svg {
+  animation: hourglass-tip 2.4s ease-in-out infinite;
+}
+@keyframes hourglass-tip {
+  0%, 70%, 100% { transform: rotate(0deg); }
+  80%, 95% { transform: rotate(180deg); }
+}
+
+/* ── Avatars ──────────────────────────────────────────────────────────────── */
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+}
+
+/* ── Progress bars ────────────────────────────────────────────────────────── */
+.bar {
+  height: 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.10);
+  overflow: hidden;
+}
+.bar > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  transition: width 0.5s var(--smooth);
+}
+
+/* ── Spoons (sky-blue energy register — never red) ────────────────────────── */
+.spoon-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.spoon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  padding: 0;
+  background: none;
+  color: var(--text-light);
+  transition: transform 0.1s var(--spring), color 0.2s ease;
+}
+.spoon.full {
+  color: var(--sky);
+}
+.spoon:active {
+  transform: scale(1.25);
+}
+
+/* ── Bottom nav (frosted glass) ───────────────────────────────────────────── */
+.nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 6px calc(10px + var(--safe-bottom));
+  height: calc(72px + var(--safe-bottom));
+  background: rgba(13, 11, 26, 0.75);
+  backdrop-filter: blur(48px) saturate(1.8);
+  -webkit-backdrop-filter: blur(48px) saturate(1.8);
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  box-shadow: 0 -1px 32px rgba(0, 0, 0, 0.40);
+}
+.nav a {
+  flex: 1;
+  text-decoration: none;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 0;
+  border-radius: 16px;
+  min-height: 56px;
+  justify-content: center;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.nav a .nav-ico {
+  display: grid;
+  place-items: center;
+}
+.nav a.active {
+  color: var(--coral);
+  background: rgba(255, 107, 107, 0.16);
+}
+
+/* ── Banner (Tonight's Dinner) ────────────────────────────────────────────── */
+.dinner-banner {
+  position: relative;
+  border-radius: 22px;
+  padding: 22px 24px;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(48px) saturate(1.8);
+  -webkit-backdrop-filter: blur(48px) saturate(1.8);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-left: 5px solid var(--coral);
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  margin-bottom: 16px;
+}
+.dinner-banner h2 {
+  font-size: 24px;
+  color: var(--text-primary);
+}
+.dinner-banner .sub {
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-top: 4px;
+}
+
+/* ── Gentle care / low-spoon nudge (soft pink, never urgent) ──────────────── */
+.care-nudge {
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(244, 114, 182, 0.14) 0%,
+    rgba(91, 196, 245, 0.10) 100%
+  );
+  border: 1.5px solid rgba(244, 114, 182, 0.25);
+  margin-bottom: 16px;
+  animation: softslide 0.5s var(--ease-out);
+}
+.care-nudge h3 {
+  font-size: 17px;
+  color: var(--care);
+  font-weight: 700;
+}
+@keyframes softslide {
+  from {
+    transform: translateY(-8px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* ── Profile picker (creature character cards) ────────────────────────────── */
+.who-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+}
+.who-card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(48px) saturate(1.8);
+  -webkit-backdrop-filter: blur(48px) saturate(1.8);
+  border-radius: 22px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.30), inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  padding: 22px 14px 18px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: transform 0.18s var(--spring), box-shadow 0.2s ease;
+}
+.who-card:active {
+  transform: scale(0.96);
+}
+.who-card:hover {
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.12);
+}
+.who-card .who-name {
+  font-family: "Quicksand", sans-serif;
+  font-weight: 800;
+  margin-top: 12px;
+  font-size: 19px;
+  color: var(--text-primary);
+}
+.who-card .who-role {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* ── PIN pad ──────────────────────────────────────────────────────────────── */
+.pin-dots {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  margin: 18px 0 24px;
+}
+.pin-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--coral);
+  background: transparent;
+}
+.pin-dot.on {
+  background: var(--coral);
+}
+.pin-pad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  max-width: 320px;
+  margin: 0 auto;
+}
+.pin-key {
+  min-height: 64px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.10);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  color: var(--text-primary);
+  font-family: "Quicksand", sans-serif;
+  font-size: 28px;
+  font-weight: 600;
+}
+.pin-key:active {
+  transform: scale(0.94);
+  background: rgba(255, 107, 107, 0.22);
+}
+
+/* ── Misc ─────────────────────────────────────────────────────────────────── */
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.muted {
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.tag-done {
+  color: var(--mint);
+  font-weight: 700;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+.field label {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-primary);
+}
+.field input,
+.field select,
+.field textarea {
+  border: 1.5px solid rgba(255, 255, 255, 0.14);
+  border-radius: var(--radius-sm);
+  padding: 13px 15px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary);
+}
+.field select option {
+  background: #1e1632;
+  color: #ffffff;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--coral);
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--text-light);
+}
+.field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+.empty {
+  text-align: center;
+  color: var(--text-muted);
+  padding: 28px 10px;
+  font-weight: 500;
+}
+.section-head {
+  font-family: "Quicksand", sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  margin: 24px 0 12px;
+  color: var(--text-primary);
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(255, 171, 46, 0.18);
+  color: var(--amber);
+}
+.chip-spend {
+  background: rgba(62, 207, 171, 0.18);
+  color: var(--mint);
+}
+.crown {
+  font-size: 18px;
+}
+.linklike {
+  background: none;
+  color: var(--coral);
+  text-decoration: underline;
+  padding: 0;
+  min-height: auto;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* ── Celebration overlay ──────────────────────────────────────────────────── */
+.cel-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  background: rgba(26, 26, 26, 0.35);
+  backdrop-filter: blur(4px);
+  padding: 24px;
+}
+.cel-card {
+  background: rgba(20, 14, 40, 0.90);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 28px;
+  padding: 32px 26px;
+  text-align: center;
+  max-width: 360px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.50);
+  animation: pop 0.4s var(--spring);
+}
+.cel-card.iridescent {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 182, 255, 0.5),
+    rgba(130, 220, 255, 0.5),
+    rgba(255, 220, 130, 0.5)
+  );
+}
+.cel-card.care {
+  /* quieter register — soft pink, no fanfare */
+  border-color: rgba(244, 114, 182, 0.5);
+  box-shadow: 0 12px 40px rgba(244, 114, 182, 0.25);
+}
+.cel-emoji {
+  font-size: 60px;
+}
+.cel-title {
+  font-family: "Quicksand", sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  margin: 10px 0 4px;
+  color: var(--text-primary);
+}
+.cel-card.care .cel-title {
+  color: #c44d8f;
+}
+@keyframes pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+.confetti {
+  position: fixed;
+  top: -10px;
+  width: 10px;
+  height: 14px;
+  z-index: 99;
+  border-radius: 2px;
+  animation: fall linear forwards;
+}
+@keyframes fall {
+  to {
+    transform: translateY(110vh) rotate(540deg);
+    opacity: 0.9;
+  }
+}
+
+/* ── Liquid glass utilities (new v3 components) ───────────────────────────── */
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1.5px solid var(--glass-border);
+  border-radius: var(--radius);
+  box-shadow: var(--glass-shadow);
+  padding: 20px 24px;
+}
+.iridescent {
+  background: linear-gradient(
+    135deg,
+    rgba(255, 182, 255, 0.4),
+    rgba(130, 220, 255, 0.4),
+    rgba(255, 220, 130, 0.4)
+  );
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+}
+
+/* idle breathing bob for creature avatars */
+@keyframes creature-idle {
+  0%,
+  100% {
+    transform: translateY(-3px);
+  }
+  50% {
+    transform: translateY(3px);
+  }
+}
+.creature-idle {
+  animation: creature-idle 2.4s var(--smooth) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .confetti {
+    display: none;
+  }
+  .cel-card,
+  .care-nudge,
+  .creature-idle {
+    animation: none;
+  }
+}
