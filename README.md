@@ -1,14 +1,14 @@
-# FamilyQuest 🏰 — The Household RPG
+# FamilyQuest — The Family Game
 
-> *"A fantasy RPG for your household — where doing dishes earns you XP, cooking
-> dinner makes you a legendary chef, and the whole guild rallies when someone's
-> running low on spoons."*
+> *"The whole of family life — chores, dinner, groceries, feelings, and the
+> calendar — turned into a game the household actually wants to play."*
 
-A tablet-first family household app that feels like a cozy fantasy RPG, not a
-chore tracker. Family members are **Adventurers** and **Guild Masters**; tasks
-are **Quests** that earn **XP**, levels, skills, and badges; there's a daily
-cooking rotation, a Reward Shop, and a caring **Spoon Theory** layer so the
-family can rally for whoever's running low today.
+A tablet-first family household app with warm, modern "liquid glass" visuals
+and chunky blob-creature avatars — not a chore tracker, not a medieval RPG.
+Family members are **Adventurers** and **Guild Masters**; tasks are
+**Quests** that earn **XP**, levels, skills, and badges; there's a daily
+cooking rotation, a Reward Shop, a shared calendar, and a caring **Spoon
+Theory** layer so the family can rally for whoever's running low today.
 
 All data lives privately in the browser — no accounts, no internet sharing, no
 ads, no payments. (The only secret is a local 4-digit **Guild Master PIN**.)
@@ -33,8 +33,7 @@ stop the server, press `Ctrl + C`.
 1. Make sure your computer and the device are on the **same Wi-Fi**.
 2. Run `npm run dev -- --host`. It prints a `Network:` address.
 3. On the iPad, open that address in **Safari**.
-4. Tap **Share** → **Add to Home Screen**. It opens full-screen, like an app
-   (portrait, dark fantasy theme).
+4. Tap **Share** → **Add to Home Screen**. It opens full-screen, like a real app.
 
 > Heads up: with this free "local-only" setup, each device keeps its **own** data.
 > The code is structured (one JSON-serializable state object) so cloud sync can be
@@ -48,22 +47,24 @@ npm run preview  # preview the built version
 ```
 
 The `dist/` folder is a plain static site you can drop onto a free host like
-**Netlify** or **Vercel**.
+**Netlify** or **Vercel**, or this repo's own GitHub Pages workflow
+(`.github/workflows/deploy-pages.yml`).
 
 ## How it's organized (for the curious)
 
 - `src/types.ts` — the data model (family, people, quests, rewards, recipes, spoons…).
 - `src/data/seed.ts` — the example family (Dad, Mom, Papa, Nezzie, Rowen) plus a
-  blank starter state for the setup wizard. Editable in-app via ⚙️ Settings.
+  blank starter state for the setup wizard. Editable in-app via Settings.
 - `src/engine/` — the **fairness engine** (capability + capacity + buddy pairing),
   the **cooking rotation**, **spoons**, and the **game rules** (levels, titles,
   skills, badges).
 - `src/store/AppStore.tsx` — one place that holds all state, persists it to the
   browser, and drives celebrations. Every action lives here.
-- `src/screens/` — SetupWizard, ProfilePicker, and the five tabs:
-  🏰 Home · ⚔️ Quests · 🍲 Kitchen · 🏆 Guild · 🦸 Hero, plus ⚙️ Settings (Guild Masters).
-- `src/components/` — shared pieces (avatars, progress bars, the spoon row, the
-  PIN pad, the celebration overlay, the bottom nav).
+- `src/screens/` — SetupWizard, ProfilePicker, and the tabs: Home · Quests ·
+  Kitchen · Calendar · Guild · Me, plus Settings (Guild Masters).
+- `src/components/` — shared pieces: the blob-creature `Avatar`/`Creature`
+  system, progress bars, the spoon row, the PIN pad, the celebration overlay,
+  the bottom nav.
 
 ## The guardrails (built in on purpose)
 

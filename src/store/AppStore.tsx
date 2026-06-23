@@ -40,7 +40,8 @@ function loadState(): AppState {
     if (raw) {
       const parsed = JSON.parse(raw);
       const state: AppState = { ...makeEmptyState(), ...parsed };
-      // Migrate avatars: ensure emoji + array fields are always present.
+      // Migrate avatars: ensure shape/eyes + array fields are always present
+      // (older saves from the emoji-picker era won't have bodyShape/eyes).
       state.people = state.people.map((p) => {
         if (!p.avatar || typeof p.avatar !== "object") {
           return { ...p, avatar: defaultAvatar(p.color ?? "#aaaaaa") };
@@ -49,7 +50,8 @@ function loadState(): AppState {
           ...p,
           avatar: {
             ...p.avatar,
-            emoji: p.avatar.emoji ?? "😊",
+            bodyShape: p.avatar.bodyShape ?? "round",
+            eyes: p.avatar.eyes ?? "googly",
             equippedAccessories: p.avatar.equippedAccessories ?? [],
             unlockedAccessories: p.avatar.unlockedAccessories ?? [],
           },
