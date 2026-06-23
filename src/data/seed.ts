@@ -1,16 +1,16 @@
 // ── Seed data — the example family + starter content from the PRD §9 ──────────
-import type { AppState, Person, Chore, Reward, Recipe } from "../types";
+import type { AppState, Person, Chore, Reward, Recipe, BodyShape, EyeStyle } from "../types";
 import { defaultAvatar } from "../types";
 
-function avatar(color: string, emoji: string): Person["avatar"] {
-  return { ...defaultAvatar(color), emoji };
+function avatar(color: string, bodyShape: BodyShape, eyes: EyeStyle): Person["avatar"] {
+  return { ...defaultAvatar(color), bodyShape, eyes };
 }
 
 const people: Person[] = [
   {
     id: "dad",
     name: "Dad",
-    avatar: avatar("#2DA9E1", "😎"),
+    avatar: avatar("#2DA9E1", "round", "googly"),
     color: "#2DA9E1",
     role: "parent",
     ability: "full",
@@ -27,7 +27,7 @@ const people: Person[] = [
   {
     id: "mom",
     name: "Mom",
-    avatar: avatar("#E84E8A", "🥰"),
+    avatar: avatar("#E84E8A", "tall", "sparkly"),
     color: "#E84E8A",
     role: "parent",
     ability: "full",
@@ -44,7 +44,7 @@ const people: Person[] = [
   {
     id: "papa",
     name: "Papa",
-    avatar: avatar("#7B61FF", "🤩"),
+    avatar: avatar("#7B61FF", "pudgy", "determined"),
     color: "#7B61FF",
     role: "parent",
     ability: "full",
@@ -61,7 +61,7 @@ const people: Person[] = [
   {
     id: "nezzie",
     name: "Nezzie",
-    avatar: avatar("#FFA63D", "⭐"),
+    avatar: avatar("#FFA63D", "spiky", "starry"),
     color: "#FFA63D",
     role: "kid",
     age: 10,
@@ -79,7 +79,7 @@ const people: Person[] = [
   {
     id: "rowen",
     name: "Rowen",
-    avatar: avatar("#3DD68C", "🐸"),
+    avatar: avatar("#3DD68C", "round", "wide"),
     color: "#3DD68C",
     role: "kid",
     age: 2,

@@ -58,21 +58,23 @@ export type FaceMood =
   | "calm";
 
 export interface AvatarConfig {
-  emoji: string;   // displayed emoji avatar
-  color: string;   // background circle color
+  bodyShape: BodyShape;
+  color: string;   // body color
+  eyes: EyeStyle;
   equippedAccessories: string[];
   unlockedAccessories: string[];
-  // Legacy shape fields kept so old localStorage saves don't crash on load
-  bodyShape?: BodyShape;
-  eyes?: EyeStyle;
+  // Legacy field from the v1 emoji-picker avatar. Kept optional so old
+  // localStorage saves load without crashing; no longer rendered.
+  emoji?: string;
 }
 
 export const FREE_ACCESSORIES: string[] = [];
 
 export function defaultAvatar(color: string): AvatarConfig {
   return {
-    emoji: "😊",
+    bodyShape: "round",
     color,
+    eyes: "googly",
     equippedAccessories: [],
     unlockedAccessories: [],
   };

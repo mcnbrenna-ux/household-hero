@@ -1,37 +1,27 @@
 // ── Small shared UI pieces ────────────────────────────────────────────────────
 import { useEffect, useState } from "react";
-import type { Person } from "../types";
+import type { FaceMood, Person } from "../types";
+import { Creature } from "./Creature";
 
 export function Avatar({
   person,
   size = 44,
+  mood = "happy",
+  idle = false,
 }: {
   person: Person;
   size?: number;
-  mood?: unknown;
+  mood?: FaceMood;
   idle?: boolean;
 }) {
-  const emoji = person.avatar?.emoji ?? "😊";
-  const color = person.color ?? "#aaaaaa";
   return (
-    <div
-      className="avatar"
-      style={{
-        width: size,
-        height: size,
-        borderRadius: "50%",
-        background: color,
-        display: "grid",
-        placeItems: "center",
-        fontSize: Math.round(size * 0.52),
-        lineHeight: 1,
-        flexShrink: 0,
-        userSelect: "none",
-      }}
-      aria-label={person.name}
-    >
-      {emoji}
-    </div>
+    <Creature
+      avatar={person.avatar}
+      size={size}
+      mood={mood}
+      idle={idle}
+      title={person.name}
+    />
   );
 }
 
