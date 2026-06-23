@@ -1,12 +1,12 @@
 {
-  "name": "FamilyQuest — The Household RPG",
+  "name": "FamilyQuest — The Family Game",
   "short_name": "FamilyQuest",
-  "description": "A fantasy RPG for your household — earn XP, level up, and rally the guild when someone's low on spoons.",
+  "description": "Chores, dinner, groceries, feelings, and the calendar — turned into a game the whole household wants to play.",
   "start_url": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#1A1A2E",
-  "theme_color": "#1A1A2E",
+  "background_color": "#FAF8F5",
+  "theme_color": "#FAF8F5",
   "icons": [
     {
       "src": "./favicon.svg",
